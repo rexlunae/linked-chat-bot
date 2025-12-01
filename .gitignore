@@ -1,0 +1,16 @@
+/target
+
+# Environment and credentials
+.env
+google_credentials.json
+google_token_cache.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
