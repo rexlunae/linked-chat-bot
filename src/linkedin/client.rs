@@ -1,4 +1,10 @@
 //! LinkedIn client for browser automation.
+//!
+//! This module uses the `headless_chrome` crate for browser automation.
+//! Note: The browser automation library is synchronous by design, so
+//! blocking calls like `std::thread::sleep` are used instead of async
+//! alternatives. When used in an async context, consider wrapping calls
+//! in `tokio::task::spawn_blocking` for better concurrency.
 
 use anyhow::{Context, Result};
 use headless_chrome::{Browser, LaunchOptions, Tab};
@@ -10,7 +16,11 @@ use super::{Conversation, LinkedInProfile, Message};
 use crate::config::LinkedInConfig;
 
 /// LinkedIn client that uses browser automation.
+///
+/// Note: This client uses synchronous browser automation. All methods
+/// perform blocking I/O operations.
 pub struct LinkedInClient {
+    #[allow(dead_code)]
     browser: Browser,
     tab: Arc<Tab>,
     logged_in: bool,
@@ -286,6 +296,21 @@ impl LinkedInClient {
     }
 
     /// Send a message in a conversation.
+    ///
+    /// # Warning
+    /// This is a stub implementation that logs the message but does not
+    /// actually send it. A full implementation would require:
+    /// 1. Navigating to the conversation
+    /// 2. Finding the message input field  
+    /// 3. Typing the message
+    /// 4. Clicking send
+    ///
+    /// # Arguments
+    /// * `conversation_id` - The ID of the conversation
+    /// * `message` - The message text to send
+    ///
+    /// # Returns
+    /// Returns Ok(()) but the message is NOT actually sent in this stub.
     pub fn send_message(&self, conversation_id: &str, message: &str) -> Result<()> {
         if !self.logged_in {
             return Err(anyhow::anyhow!("Not logged in to LinkedIn"));
@@ -296,14 +321,19 @@ impl LinkedInClient {
             conversation_id, message
         );
 
-        // In a production implementation, this would:
-        // 1. Navigate to or open the conversation
-        // 2. Find the message input field
-        // 3. Type the message
-        // 4. Click send
-
-        // For now, we'll just log the action
-        warn!("Message sending is not fully implemented in this demo");
+        // TODO: Implement actual message sending
+        // This requires more complex DOM manipulation:
+        // 1. Click on the conversation to open it
+        // 2. Wait for the message thread to load
+        // 3. Find the message input textarea
+        // 4. Focus and type the message
+        // 5. Click the send button or press Enter
+        // 6. Wait for confirmation that the message was sent
+        
+        warn!(
+            "Message sending is a stub implementation. Message NOT actually sent: {}",
+            message
+        );
 
         Ok(())
     }

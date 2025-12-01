@@ -10,7 +10,7 @@ mod config;
 mod linkedin;
 
 use anyhow::{Context, Result};
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
+use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 use tracing::{error, info, warn};
@@ -337,8 +337,8 @@ fn create_interview_event(interview: &ai::ParsedInterview) -> Result<InterviewEv
         .context("Failed to parse interview time")?;
     let datetime = NaiveDateTime::new(date, time);
 
-    // Convert to UTC (assuming local time for now)
-    let start_time = Utc.from_utc_datetime(&datetime);
+    // Convert to UTC DateTime
+    let start_time = datetime.and_utc();
 
     let title = format!(
         "{} Interview - {} at {}",
@@ -560,7 +560,7 @@ async fn export_interview(
     let date = NaiveDate::parse_from_str(date, "%Y-%m-%d").context("Invalid date format")?;
     let time = NaiveTime::parse_from_str(time, "%H:%M").context("Invalid time format")?;
     let datetime = NaiveDateTime::new(date, time);
-    let start_time = Utc.from_utc_datetime(&datetime);
+    let start_time = datetime.and_utc();
 
     let event_title = format!("{interview_type} Interview - {title} at {company}");
     let description = format!("Job: {title} at {company}\nType: {interview_type}");

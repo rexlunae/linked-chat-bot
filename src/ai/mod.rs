@@ -3,4 +3,4 @@
 mod assistant;
 mod prompts;
 
-pub use assistant::{AIAssistant, ParsedInterview};
+pub use assistant::{AIAssistant, ParsedInterview, ParsedJob};

@@ -21,6 +21,14 @@ pub struct Config {
 }
 
 /// LinkedIn login credentials.
+///
+/// # Security Note
+/// Credentials are stored in memory as plain strings. For enhanced security
+/// in production environments, consider:
+/// - Using a credential manager or keychain
+/// - Implementing OAuth 2.0 authentication when LinkedIn supports it
+/// - Using environment variables with restricted access
+/// - Encrypting config files at rest
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LinkedInConfig {
     /// LinkedIn email or username
@@ -30,6 +38,12 @@ pub struct LinkedInConfig {
 }
 
 /// OpenAI API configuration.
+///
+/// # Security Note
+/// API keys are sensitive credentials. Ensure they are:
+/// - Not committed to version control
+/// - Stored in environment variables or secure config files
+/// - Rotated regularly
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OpenAIConfig {
     /// OpenAI API key
